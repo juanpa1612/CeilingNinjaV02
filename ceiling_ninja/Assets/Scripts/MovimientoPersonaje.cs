@@ -11,7 +11,13 @@ public class MovimientoPersonaje : MonoBehaviour {
 	private Vector3 movimiento;
 	private int lugar;
 
-	void Awake () 
+    //Obstaculos
+    public const string OBSTACULO = "obstaculo";
+    public float velocidad = 2;
+    private bool murio;
+    Animator animacion;
+
+    void Awake () 
 	{
 		lugar = 0;
 		animator = GetComponent<Animator> ();
@@ -22,8 +28,10 @@ public class MovimientoPersonaje : MonoBehaviour {
 
 	void Start()
 	{
-		Inicio ();
-	}
+        //Obstaculos
+        murio = false;
+        animacion = this.gameObject.GetComponent<Animator>();
+    }
 
 	void Update () 
 	{
@@ -60,7 +68,20 @@ public class MovimientoPersonaje : MonoBehaviour {
 		}
 	}
 
-	public void Salto()
+    //Obstaculos
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("Inicio");
+        if (other.gameObject.transform.tag.Equals("obstaculo") && murio == false)
+        {
+            Debug.Log("Muerte");
+            Muerte();
+            murio = true;
+
+        }
+    }
+
+    public void Salto()
 	{
 		animator.SetInteger ("Salto", 1);
 	}

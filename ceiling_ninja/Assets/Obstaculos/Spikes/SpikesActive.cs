@@ -4,13 +4,17 @@ using System.Collections;
 public class SpikesActive : MonoBehaviour {
 
     private Animator animSpikes;
+    public GameObject activador;
 
     private void Start()
     {
         animSpikes = GetComponent<Animator>();
         animSpikes.SetInteger("Estado", 0);
-        
+
+
     }
+
+  
 
     // Update is called once per frame
     void Update ()
