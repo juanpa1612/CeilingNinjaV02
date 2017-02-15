@@ -47,10 +47,13 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Obstaculos\Spikes\SpikesActive.cs" />
-     <Compile Include="Assets\Scripts\AnimController.cs" />
-     <Compile Include="Assets\Scripts\CorrerPared.cs" />
+     <Compile Include="Assets\Scripts\ActivadorSpikes.cs" />
+     <Compile Include="Assets\Scripts\AnimationHacha.cs" />
+     <Compile Include="Assets\Scripts\GameController.cs" />
      <Compile Include="Assets\Scripts\MovimientoCamara.cs" />
      <Compile Include="Assets\Scripts\MovimientoPersonaje.cs" />
+     <Compile Include="Assets\Scripts\Obstaculos.cs" />
+     <Compile Include="Assets\Scripts\SwipeControl.cs" />
      <Compile Include="Assets\Scripts\btnplay.cs" />
      <Compile Include="Assets\UI Sources\btnPlay.cs" />
  <Reference Include="UnityEngine.UI">

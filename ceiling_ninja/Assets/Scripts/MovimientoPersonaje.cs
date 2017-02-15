@@ -5,82 +5,187 @@ using UnityEngine;
 public class MovimientoPersonaje : MonoBehaviour {
 
 
-
+	//Animaciones
 	private Animator animator;
+
+	//Movimiento
 	public float velocity = 400;
 	private Vector3 movimiento;
 	private int lugar;
 
     //Obstaculos
     public const string OBSTACULO = "obstaculo";
+<<<<<<< HEAD
+    public float velocidadObstaculos = 2;
+    public bool murio;
+    Animator animacion;
+
+	//Inicio
+	float inicioTimer;
+	private Vector3 tempMovimiento;
+	public int inicioTimerMax = 10;
+
+	//Animación muerte
+	float x = 0;
+	float y = 0.1f;//Cambiar esta para lugar de muerte
+	float z = 0;
+	Vector3 fallTo;
+	Vector3 falling = new Vector3 (0, 1, 0);
+	bool terminoDeMorir = false;
+	public float demora = 4;//Cambiar esto para velocidad de caida.
+
+=======
     public float velocidad = 2;
     private bool murio;
     Animator animacion;
 
+>>>>>>> origin/master
     void Awake () 
 	{
-		lugar = 0;
+		//Anim
 		animator = GetComponent<Animator> ();
+
+		//Movimiento
+		lugar = 0;
 		Correr ();
 		movimiento = new Vector3 (0, 0, velocity);
+
+		//Inicio
+		inicioTimer = 0;
 
 	}
 
 	void Start()
 	{
+<<<<<<< HEAD
+		//Entrada a partida
+		Inicio();
+
+=======
+>>>>>>> origin/master
         //Obstaculos
         murio = false;
         animacion = this.gameObject.GetComponent<Animator>();
     }
+<<<<<<< HEAD
 
-	void Update () 
+	public void Reinicio()
 	{
+		lugar = 0;
+		inicioTimer = 0;
+		murio = false;
+		terminoDeMorir = false;
+		movimiento = tempMovimiento;
+		Cambio ();
+		Inicio ();
+	}
+=======
+>>>>>>> origin/master
+
+	void Update ()
+	{
+		//Con esto se mueve
 		GetComponent<Rigidbody> ().velocity = movimiento * Time.deltaTime;
 
-		if (Input.GetKeyDown ("space")) {
-			Salto ();
+		//Prueba animaciones/movimiento
+		if (murio == false) {
+			if (Input.GetKeyDown ("space")) {
+				Salto ();
+			}
+
+			if (Input.GetKeyDown ("w")) {
+				lugar = 2;
+				Salto ();
+
+			}
+
+			if (Input.GetKeyDown ("d")) {
+				lugar = 3;
+				Salto ();
+			}
+
+			if (Input.GetKeyDown ("a")) {
+				lugar = 1;
+				Salto ();
+
+			}
+
+			if (Input.GetKeyDown ("s")) {
+				lugar = 0;
+				Salto ();
+			}
+
+			if (Input.GetKeyDown ("g")) {
+				Muerte ();
+			}
 		}
 
-		if (Input.GetKeyDown ("w")) {
-			lugar = 2;
-			Salto ();
-
+		//Inicio Timer
+		if (inicioTimer > 0) {
+			inicioTimer += Time.deltaTime;
 		}
 
-		if (Input.GetKeyDown ("d")) {
-			lugar = 3;
-			Salto ();
+		if (inicioTimer > inicioTimerMax) {
+			Salir ();
+			animator.SetBool ("Inicio", false);
 		}
 
-		if (Input.GetKeyDown ("a")) {
-			lugar = 1;
-			Salto ();
-
+		//Animación muerte
+		if (terminoDeMorir == true) {
+			transform.position = Vector3.SmoothDamp(transform.position, fallTo, ref falling, Time.deltaTime*demora);
 		}
 
-		if (Input.GetKeyDown ("s")) {
-			lugar = 0;
-			Salto ();
-		}
 
-		if (Input.GetKeyDown ("g")) {
-			Muerte ();
+		//prueba reinicio
+		if (Input.GetKeyDown ("r")) {
+			Reinicio ();
 		}
 	}
 
     //Obstaculos
     private void OnTriggerEnter(Collider other)
     {
+<<<<<<< HEAD
+        //Debug.Log("Inicio");
+        if (other.gameObject.transform.tag.Equals("obstaculo") && murio == false)
+        {
+            //Debug.Log("Muerte");
+=======
         Debug.Log("Inicio");
         if (other.gameObject.transform.tag.Equals("obstaculo") && murio == false)
         {
             Debug.Log("Muerte");
+>>>>>>> origin/master
             Muerte();
             murio = true;
 
         }
     }
 
+<<<<<<< HEAD
+	//Entrada a partida
+	public void Inicio()
+	{
+		inicioTimer++;
+		tempMovimiento = movimiento;
+		movimiento = Vector3.zero;
+		animator.SetTrigger("Reinicio");
+		animator.SetBool ("Inicio", true);
+	}
+
+	public void Salir()
+	{
+		inicioTimer = 0;
+		movimiento = tempMovimiento;
+		Correr ();
+
+	}
+
+
+
+	//Transición - Salto
+=======
+>>>>>>> origin/master
     public void Salto()
 	{
 		animator.SetInteger ("Salto", 1);
@@ -91,6 +196,7 @@ public class MovimientoPersonaje : MonoBehaviour {
 		animator.SetInteger ("Salto", 0);
 	}
 
+	//Cambio de lugar
 	public void Cambio()
 	{
 		switch (lugar)
@@ -117,13 +223,28 @@ public class MovimientoPersonaje : MonoBehaviour {
 		}
 	}
 
+
+	//Muerte
 	public void Muerte()
 	{
-		movimiento = Vector3.zero;
-		animator.SetTrigger ("Death");
+			tempMovimiento = movimiento;
+			movimiento = Vector3.zero;
+			animator.SetTrigger("Death");
+			GetComponent<Animator> ().Play ("Golpe", -1, 0);
+	}
+
+	//Animación de Muerte
+	public void MuerteNoSuelo()
+	{
+		x = transform.position.x;
+		z = transform.position.z;
+		fallTo = new Vector3 (x, y, z);
+		terminoDeMorir = true;
 	}
 
 
+
+	//Animaciones + movimiento
 	public void CorrerDerecha()
 	{
 		float z = transform.position.z;
@@ -157,6 +278,7 @@ public class MovimientoPersonaje : MonoBehaviour {
 		transform.rotation = rotacion;
 	}
 
+	//Default
 	public void Correr()
 	{
 		float z = transform.position.z;
