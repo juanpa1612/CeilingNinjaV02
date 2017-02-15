@@ -15,6 +15,7 @@ public class MovimientoPersonaje : MonoBehaviour {
 
     //Obstaculos
     public const string OBSTACULO = "obstaculo";
+<<<<<<< HEAD
     public float velocidadObstaculos = 2;
     public bool murio;
     Animator animacion;
@@ -33,6 +34,12 @@ public class MovimientoPersonaje : MonoBehaviour {
 	bool terminoDeMorir = false;
 	public float demora = 4;//Cambiar esto para velocidad de caida.
 
+=======
+    public float velocidad = 2;
+    private bool murio;
+    Animator animacion;
+
+>>>>>>> origin/master
     void Awake () 
 	{
 		//Anim
@@ -50,13 +57,17 @@ public class MovimientoPersonaje : MonoBehaviour {
 
 	void Start()
 	{
+<<<<<<< HEAD
 		//Entrada a partida
 		Inicio();
 
+=======
+>>>>>>> origin/master
         //Obstaculos
         murio = false;
         animacion = this.gameObject.GetComponent<Animator>();
     }
+<<<<<<< HEAD
 
 	public void Reinicio()
 	{
@@ -68,6 +79,8 @@ public class MovimientoPersonaje : MonoBehaviour {
 		Cambio ();
 		Inicio ();
 	}
+=======
+>>>>>>> origin/master
 
 	void Update ()
 	{
@@ -132,16 +145,24 @@ public class MovimientoPersonaje : MonoBehaviour {
     //Obstaculos
     private void OnTriggerEnter(Collider other)
     {
+<<<<<<< HEAD
         //Debug.Log("Inicio");
         if (other.gameObject.transform.tag.Equals("obstaculo") && murio == false)
         {
             //Debug.Log("Muerte");
+=======
+        Debug.Log("Inicio");
+        if (other.gameObject.transform.tag.Equals("obstaculo") && murio == false)
+        {
+            Debug.Log("Muerte");
+>>>>>>> origin/master
             Muerte();
             murio = true;
 
         }
     }
 
+<<<<<<< HEAD
 	//Entrada a partida
 	public void Inicio()
 	{
@@ -163,6 +184,8 @@ public class MovimientoPersonaje : MonoBehaviour {
 
 
 	//Transición - Salto
+=======
+>>>>>>> origin/master
     public void Salto()
 	{
 		animator.SetInteger ("Salto", 1);
