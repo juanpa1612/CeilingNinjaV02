@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class MovimientoCamara : MonoBehaviour {
 
-	public GameObject player;
+	//Camara
+	public GameObject player; //Con esto se busca el personaje
 	float offset;
-	public float damping = 1;
+	public float damping = 2; //en teoria, cuanto debe de quedarse atrás del jugador
 
 	void Start()
 	{
@@ -16,7 +17,7 @@ public class MovimientoCamara : MonoBehaviour {
 	void LateUpdate()
 	{
 		float desiredPosition = player.transform.position.z + offset;
-		//float position = Mathf.Lerp (transform.position.z, desiredPosition, Time.deltaTime * damping);
+		float position = Mathf.Lerp (transform.position.z, desiredPosition, Time.deltaTime * damping);
 		transform.position = new Vector3(transform.position.x, transform.position.y, desiredPosition);
 
 	}
