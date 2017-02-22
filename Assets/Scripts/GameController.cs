@@ -11,13 +11,27 @@ public class GameController : MonoBehaviour {
 	Vector3 playerPosition;
 	Vector3 originalPosition;
 
-	bool muerte;
+	private bool muerte;
 	public bool reinicio; //para el hacha
 
 	float timerMuerte;
 	public float timerMax = 5;
 
-	void Awake () {
+    //Setter Y Getter
+    public bool Muerte
+    {
+        get
+        {
+            return muerte;
+        }
+
+        set
+        {
+            muerte = value;
+        }
+    }
+
+    void Awake () {
 		ninja = GameObject.FindWithTag ("Player");
 		script = ninja.GetComponent<MovimientoPersonaje> ();
 		playerPosition = ninja.transform.position;

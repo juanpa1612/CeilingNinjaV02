@@ -144,21 +144,11 @@ public class MovimientoPersonaje : MonoBehaviour {
     //Obstaculos
     private void OnTriggerEnter(Collider other)
     {
-
-        //Debug.Log("Inicio");
-        if (other.gameObject.transform.tag.Equals("obstaculo") && murio == false)
-        {
-            //Debug.Log("Muerte");
-
-        Debug.Log("Inicio");
         if (other.gameObject.transform.tag.Equals("obstaculo") && murio == false)
         {
             Debug.Log("Muerte");
-
             Muerte();
             murio = true;
-
-        }
         }
     }
 

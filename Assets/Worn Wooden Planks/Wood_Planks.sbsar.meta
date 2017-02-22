@@ -10,7 +10,7 @@ labels:
 - material
 - procedural
 - substance
-timeCreated: 1487169869
+timeCreated: 1487359057
 licenseType: Free
 SubstanceImporter:
   serializedVersion: 5
@@ -158,7 +158,7 @@ SubstanceImporter:
       - first:
           name: _MainTex
         second:
-          texture: {instanceID: 0}
+          texture: {fileID: 2800000, guid: dfae3b227249e9747aeb9c07dab7c48b, type: 3}
           scale: {x: 3, y: 2}
           offset: {x: 0, y: 0}
       - first:
@@ -266,10 +266,6 @@ SubstanceImporter:
         name: _BumpMap
       material: {instanceID: 0}
       baseUID: 1978675380
-    - shaderProp:
-        name: _MainTex
-      material: {instanceID: 0}
-      baseUID: 1978675382
     - shaderProp:
         name: _MetallicGlossMap
       material: {instanceID: 0}

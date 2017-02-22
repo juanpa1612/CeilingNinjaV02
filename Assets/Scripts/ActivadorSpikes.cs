@@ -15,5 +15,6 @@ public class ActivadorSpikes : MonoBehaviour {
     public void OnTriggerEnter(Collider other)
     {
         animatorSpikes.SetInteger("Estado", 1);
+        Debug.Log("Se Activaron!");
     }
 }
