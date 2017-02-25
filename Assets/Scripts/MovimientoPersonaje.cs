@@ -5,13 +5,24 @@ using UnityEngine;
 public class MovimientoPersonaje : MonoBehaviour {
 
 
-	//Animaciones
-	private Animator animator;
+    //Animaciones
+    private Animator animator;
+    float desiredPosition;
+    float position;
+    Quaternion desiredRotation;
+    Quaternion rotation;
+    float damping = 5;
+    float xAct;
+    float zAct;
 
-	//Movimiento
-	public float velocity = 400;
-	private Vector3 movimiento;
-	private int lugar;
+    //Particulas
+    public ParticleSystem efecto;
+
+    //Movimiento
+    public float velocity = 400;
+    private Vector3 movimiento;
+    public int lugar;
+    private int lugarActual;
 
     //Obstaculos
     public const string OBSTACULO = "obstaculo";
@@ -19,19 +30,20 @@ public class MovimientoPersonaje : MonoBehaviour {
     public bool murio;
     Animator animacion;
 
-	//Inicio
-	float inicioTimer;
-	private Vector3 tempMovimiento;
-	public int inicioTimerMax = 10;
+    //Inicio
+    public bool iniciando;
+    float inicioTimer;
+    private Vector3 tempMovimiento;
+    public int inicioTimerMax = 10;
 
-	//Animación muerte
-	float x = 0;
-	float y = 0.1f;//Cambiar esta para lugar de muerte
-	float z = 0;
-	Vector3 fallTo;
-	Vector3 falling = new Vector3 (0, 1, 0);
-	bool terminoDeMorir = false;
-	public float demora = 4;//Cambiar esto para velocidad de caida.
+    //Animación muerte
+    float x = 0;
+    float y = 0.1f;//Cambiar esta para lugar de muerte
+    float z = 0;
+    Vector3 fallTo;
+    Vector3 falling = new Vector3(0, 1, 0);
+    bool terminoDeMorir = false;
+    public float demora = 4;//Cambiar esto para velocidad de caida.
 
     //public float velocidad = 2;
 
@@ -40,26 +52,30 @@ public class MovimientoPersonaje : MonoBehaviour {
     Animator animacion;
     */
 
-    void Awake () 
-	{
-		//Anim
-		animator = GetComponent<Animator> ();
+    void Awake()
+    {
+        //Anim
+        animator = GetComponent<Animator>();
 
-		//Movimiento
-		lugar = 0;
-		Correr ();
-		movimiento = new Vector3 (0, 0, velocity);
+        //Movimiento
+        lugar = 0;
+        Correr();
+        movimiento = new Vector3(0, 0, velocity);
 
-		//Inicio
-		inicioTimer = 0;
+        //Inicio
+        iniciando = true;
+        inicioTimer = 0;
 
-	}
+        //Efectos
+        efecto = GameObject.Find("Explosion").GetComponent<ParticleSystem>();
 
-	void Start()
-	{
+    }
 
-		//Entrada a partida
-		Inicio();
+    void Start()
+    {
+
+        //Entrada a partida
+        Inicio();
 
 
 
@@ -69,214 +85,298 @@ public class MovimientoPersonaje : MonoBehaviour {
     }
 
 
-	public void Reinicio()
-	{
-		lugar = 0;
-		inicioTimer = 0;
-		murio = false;
-		terminoDeMorir = false;
-		movimiento = tempMovimiento;
-		Cambio ();
-		Inicio ();
-	}
+    public void Reinicio()
+    {
+        lugar = 0;
+        inicioTimer = 0;
+        murio = false;
+        terminoDeMorir = false;
+        movimiento = tempMovimiento;
+        Cambio();
+        Inicio();
+    }
 
 
-	public void Update ()
-	{
-		//Con esto se mueve
-		GetComponent<Rigidbody> ().velocity = movimiento * Time.deltaTime;
+    public void Update()
+    {
+        if (iniciando == false)
+        {
+            //Con esto se mueve
+            GetComponent<Rigidbody>().velocity = movimiento * Time.deltaTime;
 
-		//Prueba animaciones/movimiento
-		if (murio == false) {
-			if (Input.GetKeyDown ("space")) {
-				Salto ();
-			}
+            //Prueba animaciones/movimiento
+            if (murio == false)
+            {
+                if (Input.GetKeyDown("space"))
+                {
+                    Salto();
+                }
 
-			if (Input.GetKeyDown ("w")) {
-				lugar = 2;
-				Salto ();
+                if (Input.GetKeyDown("w"))
+                {
+                    lugar = 2;
+                    Salto();
 
-			}
+                }
 
-			if (Input.GetKeyDown ("d")) {
-				lugar = 3;
-				Salto ();
-			}
+                if (Input.GetKeyDown("d"))
+                {
+                    lugar = 3;
+                    Salto();
+                }
 
-			if (Input.GetKeyDown ("a")) {
-				lugar = 1;
-				Salto ();
+                if (Input.GetKeyDown("a"))
+                {
+                    lugar = 1;
+                    Salto();
 
-			}
+                }
 
-			if (Input.GetKeyDown ("s")) {
-				lugar = 0;
-				Salto ();
-			}
+                if (Input.GetKeyDown("s"))
+                {
+                    lugar = 0;
+                    Salto();
+                }
 
-			if (Input.GetKeyDown ("g")) {
-				Muerte ();
-			}
-		}
+                if (Input.GetKeyDown("g"))
+                {
+                    Muerte();
+                }
+            }
 
-		//Inicio Timer
-		if (inicioTimer > 0) {
-			inicioTimer += Time.deltaTime;
-		}
+        }
+        //Inicio Timer
+        if (inicioTimer > 0)
+        {
+            inicioTimer += Time.deltaTime;
+        }
 
-		if (inicioTimer > inicioTimerMax) {
-			Salir ();
-			animator.SetBool ("Inicio", false);
-		}
+        if (inicioTimer > inicioTimerMax)
+        {
+            Salir();
+            animator.SetBool("Inicio", false);
+        }
 
-		//Animación muerte
-		if (terminoDeMorir == true) {
-			transform.position = Vector3.SmoothDamp(transform.position, fallTo, ref falling, Time.deltaTime*demora);
-		}
+        //Animación muerte
+        if (terminoDeMorir == true)
+        {
+            transform.position = Vector3.SmoothDamp(transform.position, fallTo, ref falling, Time.deltaTime * demora);
+        }
 
 
-		//prueba reinicio
-		if (Input.GetKeyDown ("r")) {
-			Reinicio ();
-		}
-	}
+        //prueba reinicio
+        if (Input.GetKeyDown("r"))
+        {
+            Reinicio();
+        }
+
+
+        //Animación giro despacio
+        position = Mathf.Lerp(transform.position.y, desiredPosition, Time.deltaTime * damping);
+        transform.position = new Vector3(transform.position.x, position, transform.position.z);
+
+        //transform.rotation = Quaternion.Lerp(transform.rotation, desiredRotation,  Time.deltaTime * damping);
+    }
 
     //Obstaculos
     private void OnTriggerEnter(Collider other)
     {
+
+        //Debug.Log("Inicio");
         if (other.gameObject.transform.tag.Equals("obstaculo") && murio == false)
         {
-            Debug.Log("Muerte");
-            Muerte();
-            murio = true;
+            //Debug.Log("Muerte");
+
+            // Debug.Log("Inicio");
+            if (other.gameObject.transform.tag.Equals("obstaculo") && murio == false)
+            {
+                //Debug.Log("Muerte");
+
+                Muerte();
+                murio = true;
+
+            }
         }
     }
 
     //Entrada a partida
     public void Inicio()
-	{
-		inicioTimer++;
-		tempMovimiento = movimiento;
-		movimiento = Vector3.zero;
-		animator.SetTrigger("Reinicio");
-		animator.SetBool ("Inicio", true);
-	}
+    {
+        iniciando = true;
+        inicioTimer++;
+        tempMovimiento = movimiento;
+        movimiento = Vector3.zero;
+        animator.SetTrigger("Reinicio");
+        animator.SetBool("Inicio", true);
+    }
 
-	public void Salir()
-	{
-		inicioTimer = 0;
-		movimiento = tempMovimiento;
-		Correr ();
+    public void Salir()
+    {
+        inicioTimer = 0;
+        movimiento = tempMovimiento;
+        iniciando = false;
+        Correr();
 
-	}
+    }
 
 
 
-	//Transición - Salto
+    //Transición - Salto
 
     public void Salto()
-	{
-		animator.SetInteger ("Salto", 1);
-	}
+    {
+        if (iniciando == false)
+        {
+            if (lugarActual != lugar)
+            {
+                animator.SetInteger("Salto", 1);
+            }
+        }
+    }
 
-	public void FinalSalto()
-	{
-		animator.SetInteger ("Salto", 0);
-	}
-
-	//Cambio de lugar
-	public void Cambio()
-	{
-		switch (lugar)
-		{
-		case 0:
-			Correr();
-			break;
-
-		case 1:
-			CorrerIzquierda();
-			break;
-
-		case 2:
-			CorrerTecho();
-			break;
-
-		case 3:
-			CorrerDerecha();
-			break;
-
-		default:
-			Correr();
-			break;
-		}
-	}
+    public void FinalSalto()
+    {
+        if (iniciando == false)
+        {
+            animator.SetInteger("Salto", 0);
+            efecto.Stop(true);
+        }
+    }
 
 
-	//Muerte
-	public void Muerte()
-	{
-			tempMovimiento = movimiento;
-			movimiento = Vector3.zero;
-			animator.SetTrigger("Death");
-			GetComponent<Animator> ().Play ("Golpe", -1, 0);
-	}
-
-	//Animación de Muerte
-	public void MuerteNoSuelo()
-	{
-		x = transform.position.x;
-		z = transform.position.z;
-		fallTo = new Vector3 (x, y, z);
-		terminoDeMorir = true;
-	}
+    //Efecto cuando cambia
+    public void IniciarEfecto()
+    {
+        efecto.transform.position = new Vector3(0, 1.5f, transform.position.z + 1);
+        efecto.Play(true);
+    }
 
 
+    //Cambio de lugar
+    public void Cambio()
+    {
+        if (iniciando == false)
+        {
+            if (lugarActual != lugar)
+            {
+                switch (lugar)
+                {
+                    case 0:
+                        Correr();
+                        break;
 
-	//Animaciones + movimiento
-	public void CorrerDerecha()
-	{
-		float z = transform.position.z;
-		float x = 1.3f;
-		float y = 2;
-		Vector3 pared = new Vector3(x,y,z);
-		Quaternion rotacion = Quaternion.Euler(0, 0, 90);
-		transform.position = pared;
-		transform.rotation = rotacion;
-	}
+                    case 1:
+                        CorrerIzquierda();
+                        break;
 
-	public void CorrerIzquierda()
-	{
-		float z = transform.position.z;
-		float x = -1.3f;
-		float y = 2;
-		Vector3 pared = new Vector3(x,y,z);
-		Quaternion rotacion = Quaternion.Euler(0, 0, -90);
-		transform.position = pared;
-		transform.rotation = rotacion;
-	}
+                    case 2:
+                        CorrerTecho();
+                        break;
 
-	public void CorrerTecho()
-	{
-		float z = transform.position.z;
-		float x = 0;
-		float y = 3.4f;
-		Vector3 pared = new Vector3(x,y,z);
-		Quaternion rotacion = Quaternion.Euler(0, 0, 180);
-		transform.position = pared;
-		transform.rotation = rotacion;
-	}
+                    case 3:
+                        CorrerDerecha();
+                        break;
 
-	//Default
-	public void Correr()
-	{
-		float z = transform.position.z;
-		float x = 0;
-		float y = 0;
-		Vector3 pared = new Vector3(x,y,z);
-		Quaternion rotacion = Quaternion.identity;
-		transform.position = pared;
-		transform.rotation = rotacion;
-	}
+                    default:
+                        Correr();
+                        break;
+                }
+            }
+        }
+    }
+
+
+    //Muerte
+    public void Muerte()
+    {
+        tempMovimiento = movimiento;
+        movimiento = Vector3.zero;
+        animator.SetTrigger("Death");
+        GetComponent<Animator>().Play("Golpe", -1, 0);
+    }
+
+    //Animación de Muerte
+    public void MuerteNoSuelo()
+    {
+        x = transform.position.x;
+        z = transform.position.z;
+        fallTo = new Vector3(x, y, z);
+        terminoDeMorir = true;
+    }
+
+
+
+    //Animaciones + movimiento
+    public void CorrerDerecha()
+    {
+        lugarActual = 3;
+
+        float z = transform.position.z;
+        float x = 1.3f;
+        float y = 2;
+        Vector3 pared = new Vector3(x, y, z);
+        Quaternion rotacion = Quaternion.Euler(0, 0, 90);
+        transform.position = pared;
+        transform.rotation = rotacion;
+
+        xAct = x;
+        zAct = z;
+        desiredPosition = y;
+        desiredRotation = rotacion;
+    }
+
+    public void CorrerIzquierda()
+    {
+        lugarActual = 1;
+
+        float z = transform.position.z;
+        float x = -1.3f;
+        float y = 2;
+        Vector3 pared = new Vector3(x, y, z);
+        Quaternion rotacion = Quaternion.Euler(0, 0, -90);
+        transform.position = pared;
+        transform.rotation = rotacion;
+
+        xAct = x;
+        zAct = z;
+        desiredPosition = y;
+    }
+
+    public void CorrerTecho()
+    {
+        lugarActual = 2;
+
+        float z = transform.position.z;
+        float x = 0;
+        float y = 3.4f;
+        Vector3 pared = new Vector3(x, y, z);
+        Quaternion rotacion = Quaternion.Euler(0, 0, 180);
+        transform.position = pared;
+        transform.rotation = rotacion;
+
+        xAct = x;
+        zAct = z;
+        desiredPosition = y;
+    }
+
+    //Default
+    public void Correr()
+    {
+        lugarActual = 0;
+
+        float z = transform.position.z;
+        float x = 0;
+        float y = 0;
+        Vector3 pared = new Vector3(x, y, z);
+        Quaternion rotacion = Quaternion.identity;
+        transform.position = pared;
+        transform.rotation = rotacion;
+
+        xAct = x;
+        zAct = z;
+        desiredPosition = y;
+    }
+
 
 
 
