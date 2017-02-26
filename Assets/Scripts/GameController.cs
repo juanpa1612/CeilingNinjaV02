@@ -28,6 +28,9 @@ public class GameController : MonoBehaviour {
     Text textoVida;
     Text textoFinal;
 
+	//Bool que detecta si está jugando o no
+	bool jugando;
+
     //Setter Y Getter
     public bool Muerte
     {
@@ -53,6 +56,7 @@ public class GameController : MonoBehaviour {
 
     void Start()
     {
+		jugando = true;
         originalPosition = Vector3.zero;
         muerte = false;
         reinicio = false;
@@ -85,6 +89,7 @@ public class GameController : MonoBehaviour {
             else
             {
                 GameOver();
+				vida = 0;
             }
         }
 
@@ -97,7 +102,7 @@ public class GameController : MonoBehaviour {
             timeText += Time.deltaTime;
         }
 
-        if (vidaPerder == true && timeText >= 1 && timerMuerte <= timeText)
+        if (vidaPerder == true && timeText >= 1 && timerMuerte <= timeText && jugando)
         {
             vida--;
             ShowText();
@@ -123,6 +128,7 @@ public class GameController : MonoBehaviour {
 
     void GameOver()
     {
+		jugando = false;
         timerMuerte = 0;
 
         vidaPerder = false;
@@ -141,6 +147,8 @@ public class GameController : MonoBehaviour {
 
     void TrueReset()
     {
+		jugando = true;
+
         originalPosition = Vector3.zero;
         muerte = false;
         reinicio = false;

@@ -35,6 +35,9 @@ public class SwipeControl : MonoBehaviour
                 Swipe();
             }
 
+
+			//Para mantener dedo cuando salta
+			/*
             if (swipeTimer >= 1)
             {
                 swipeTimer += Time.deltaTime;
@@ -50,6 +53,7 @@ public class SwipeControl : MonoBehaviour
                 personaje.Salto();
                 swipeTimer = 0;
             }
+            */
         }
     }
 

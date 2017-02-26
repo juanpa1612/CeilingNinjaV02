@@ -19,7 +19,7 @@ public class MovimientoPersonaje : MonoBehaviour {
     public ParticleSystem efecto;
 
     //Movimiento
-    public float velocity = 400;
+    public float velocity = 900;
     private Vector3 movimiento;
     public int lugar;
     private int lugarActual;
@@ -97,14 +97,45 @@ public class MovimientoPersonaje : MonoBehaviour {
     }
 
 
+	public void FixedUpdate()
+	{
+		if (iniciando == false) 
+		{
+			//Con esto se mueve
+			GetComponent<Rigidbody> ().velocity = movimiento * Time.deltaTime;
+		}
+
+		//Inicio Timer
+		if (inicioTimer > 0)
+		{
+			inicioTimer += Time.deltaTime;
+		}
+
+		if (inicioTimer > inicioTimerMax)
+		{
+			Salir();
+			animator.SetBool("Inicio", false);
+		}
+
+		//Animación muerte
+		if (terminoDeMorir == true)
+		{
+			transform.position = Vector3.SmoothDamp(transform.position, fallTo, ref falling, Time.deltaTime * demora);
+		}
+
+		//Animación cambio despacio
+		position = Mathf.Lerp(transform.position.y, desiredPosition, Time.deltaTime * damping);
+		transform.position = new Vector3(transform.position.x, position, transform.position.z);
+
+		//transform.rotation = Quaternion.Lerp(transform.rotation, desiredRotation,  Time.deltaTime * damping);
+	}
+
+
     public void Update()
     {
         if (iniciando == false)
         {
-            //Con esto se mueve
-            GetComponent<Rigidbody>().velocity = movimiento * Time.deltaTime;
-
-            //Prueba animaciones/movimiento
+           //Prueba animaciones/movimiento
             if (murio == false)
             {
                 if (Input.GetKeyDown("space"))
@@ -145,37 +176,13 @@ public class MovimientoPersonaje : MonoBehaviour {
             }
 
         }
-        //Inicio Timer
-        if (inicioTimer > 0)
-        {
-            inicioTimer += Time.deltaTime;
-        }
-
-        if (inicioTimer > inicioTimerMax)
-        {
-            Salir();
-            animator.SetBool("Inicio", false);
-        }
-
-        //Animación muerte
-        if (terminoDeMorir == true)
-        {
-            transform.position = Vector3.SmoothDamp(transform.position, fallTo, ref falling, Time.deltaTime * demora);
-        }
-
 
         //prueba reinicio
         if (Input.GetKeyDown("r"))
         {
             Reinicio();
         }
-
-
-        //Animación giro despacio
-        position = Mathf.Lerp(transform.position.y, desiredPosition, Time.deltaTime * damping);
-        transform.position = new Vector3(transform.position.x, position, transform.position.z);
-
-        //transform.rotation = Quaternion.Lerp(transform.rotation, desiredRotation,  Time.deltaTime * damping);
+			
     }
 
     //Obstaculos
@@ -293,6 +300,7 @@ public class MovimientoPersonaje : MonoBehaviour {
         movimiento = Vector3.zero;
         animator.SetTrigger("Death");
         GetComponent<Animator>().Play("Golpe", -1, 0);
+		efecto.Stop (true);
     }
 
     //Animación de Muerte
