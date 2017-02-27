@@ -7,7 +7,7 @@ public class btnPlay : MonoBehaviour
 
 	public void JugarNivel ()
     {
-        SceneManager.LoadScene("NivelPrincipal",LoadSceneMode.Single);
+        SceneManager.LoadScene("TratoDeRender",LoadSceneMode.Single);
     }
 
 }
