@@ -112,6 +112,7 @@ public class GameController : MonoBehaviour {
                 vidaPerder = false;
                 timeText = 0;
                 reinicio = true;
+
             }
             else
             {
