@@ -45,12 +45,10 @@ public class MovimientoPersonaje : MonoBehaviour {
     bool terminoDeMorir = false;
     public float demora = 4;//Cambiar esto para velocidad de caida.
 
-    //public float velocidad = 2;
+    //Checkpoint y Reinicio
+    public GameObject gc;
 
-    /*
-    private bool murio;
-    Animator animacion;
-    */
+
 
     void Awake()
     {
@@ -74,6 +72,8 @@ public class MovimientoPersonaje : MonoBehaviour {
     void Start()
     {
 
+        gc = GameObject.FindGameObjectWithTag("GameController");
+       
         //Entrada a partida
         Inicio();
 
@@ -189,19 +189,12 @@ public class MovimientoPersonaje : MonoBehaviour {
     private void OnTriggerEnter(Collider other)
     {
 
-        //Debug.Log("Inicio");
         if (other.gameObject.transform.tag.Equals("obstaculo") && murio == false)
         {
-            //Debug.Log("Muerte");
-
-            // Debug.Log("Inicio");
             if (other.gameObject.transform.tag.Equals("obstaculo") && murio == false)
             {
-                //Debug.Log("Muerte");
-
                 Muerte();
                 murio = true;
-
             }
         }
     }
@@ -225,8 +218,6 @@ public class MovimientoPersonaje : MonoBehaviour {
         Correr();
 
     }
-
-
 
     //Transición - Salto
 
@@ -384,9 +375,5 @@ public class MovimientoPersonaje : MonoBehaviour {
         zAct = z;
         desiredPosition = y;
     }
-
-
-
-
 
 }

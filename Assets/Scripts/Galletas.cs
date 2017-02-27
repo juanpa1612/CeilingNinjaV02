@@ -12,6 +12,9 @@ public class Galletas : MonoBehaviour
 
     public ParticleSystem particulaGalleta;
 
+    //public AudioClip clip1, clip2;
+    public AudioSource [] fuenteAudio = new AudioSource [2];
+
     public Vector3 posicion = new Vector3 (0.1f,0.1f,0.1f);
 
     private void Start()
@@ -19,13 +22,21 @@ public class Galletas : MonoBehaviour
         ninja = GameObject.FindGameObjectWithTag("Player");
         gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<UIManager>();
         GameController = GameObject.FindGameObjectWithTag("GameController");
+        fuenteAudio = GameController.GetComponents<AudioSource>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            GameController.GetComponent<AudioSource>().Play();
+            if (fuenteAudio[0].isPlaying)
+            {
+                fuenteAudio[1].Play();
+            }
+            else
+            {
+                fuenteAudio[0].Play();
+            }
             gameController.points += 1;
             gameObject.SetActive(false);
 

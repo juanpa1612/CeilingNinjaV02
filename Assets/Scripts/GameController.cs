@@ -8,6 +8,7 @@ public class GameController : MonoBehaviour {
 
 
     GameObject ninja;
+    public ParticleSystem partiSangre;
     MovimientoPersonaje script;
 
     Vector3 playerPosition;
@@ -28,8 +29,13 @@ public class GameController : MonoBehaviour {
     Text textoVida;
     Text textoFinal;
 
-	//Bool que detecta si está jugando o no
-	bool jugando;
+    //Checkpoint
+    public int checkpoint;
+    public GameObject parte1, parte2;
+    private Vector3 poscheckpoint1, poscheckpoint2,pos1,pos2;
+
+    //Bool que detecta si está jugando o no
+    bool jugando;
 
     //Setter Y Getter
     public bool Muerte
@@ -68,6 +74,14 @@ public class GameController : MonoBehaviour {
 
         vidaPerder = false;
         timeText = 0;
+
+        //Checkpoint
+        checkpoint = 0;
+        poscheckpoint1 = parte1.transform.position;
+        poscheckpoint2 = parte2.transform.position;
+        pos1 = new Vector3 (0,0,parte1.transform.position.z + 20f);
+        pos2 = new Vector3(0, 0,parte2.transform.position.z + 20f);
+
     }
 
 
@@ -77,7 +91,20 @@ public class GameController : MonoBehaviour {
         {
             if (vida > 0)
             {
-                ninja.transform.position = originalPosition;
+                //Checkpoint
+                if (checkpoint==0)
+                {
+                    ninja.transform.position = originalPosition;
+                }
+                if (checkpoint == 1)
+                {
+                    ninja.transform.position = pos1 ;
+                }
+                if (checkpoint == 2)
+                {
+                    ninja.transform.position = pos2;
+                }
+                //ninja.transform.position = originalPosition;
                 script.Reinicio();
                 muerte = false;
                 timerMuerte = 0;
@@ -123,6 +150,23 @@ public class GameController : MonoBehaviour {
             timerMuerte = timerMax;
             TrueReset();
         }
+        
+        //Se activa la particula de sangre en el PJ
+        if (script.murio == true)
+        {
+            StartCoroutine(playParticulaSangre());
+        }
+    }
+
+    IEnumerator playParticulaSangre ()
+    {
+        partiSangre.transform.position = ninja.transform.position;
+        partiSangre.Play();
+
+        yield return new WaitForSeconds(1f);
+
+        partiSangre.Stop();
+
     }
 
 
@@ -170,5 +214,6 @@ public class GameController : MonoBehaviour {
         timeText = 0;
         reinicio = true;
     }
+
 
 }
