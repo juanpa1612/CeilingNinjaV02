@@ -71,6 +71,7 @@ public class GameController : MonoBehaviour {
         vida = vidasMax;
         textoVida.text = "Vidas: " + vida.ToString();
         textoFinal.text = " ";
+       
 
         vidaPerder = false;
         timeText = 0;
@@ -186,6 +187,7 @@ public class GameController : MonoBehaviour {
         textoVida.text = "Vidas: " + vida.ToString();
         if (vida == 0)
         {
+            textoFinal.GetComponent<Animator>().SetBool("Anim", true);
             textoFinal.text = "Game Over";
         }
     }
