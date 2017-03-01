@@ -17,6 +17,7 @@ public class MovimientoPersonaje : MonoBehaviour {
 
     //Particulas
     public ParticleSystem efecto;
+	public ParticleSystem efectoMuerte;
 
     //Movimiento
     public float velocity = 900;
@@ -38,7 +39,7 @@ public class MovimientoPersonaje : MonoBehaviour {
 
     //Animación muerte
     float x = 0;
-    float y = 0.1f;//Cambiar esta para lugar de muerte
+    float y = 0f;//Cambiar esta para lugar de muerte
     float z = 0;
     Vector3 fallTo;
     Vector3 falling = new Vector3(0, 1, 0);
@@ -66,6 +67,7 @@ public class MovimientoPersonaje : MonoBehaviour {
 
         //Efectos
         efecto = GameObject.Find("Explosion").GetComponent<ParticleSystem>();
+		efectoMuerte = GameObject.Find ("ExplosionDeath").GetComponent<ParticleSystem> ();
 
     }
 
@@ -120,7 +122,7 @@ public class MovimientoPersonaje : MonoBehaviour {
 		//Animación muerte
 		if (terminoDeMorir == true)
 		{
-			transform.position = Vector3.SmoothDamp(transform.position, fallTo, ref falling, Time.deltaTime * demora);
+			//transform.position = Vector3.SmoothDamp(transform.position, fallTo, ref falling, Time.deltaTime * demora);
 		}
 
 		//Animación cambio despacio
@@ -250,6 +252,13 @@ public class MovimientoPersonaje : MonoBehaviour {
     }
 
 
+	//Efecto cuando muere
+	public void IniciarEfectoMuerte()
+	{
+		efectoMuerte.transform.position = new Vector3(0, 1.5f, transform.position.z - 1);
+		efectoMuerte.Play(true);
+	}
+
     //Cambio de lugar
     public void Cambio()
     {
@@ -297,10 +306,18 @@ public class MovimientoPersonaje : MonoBehaviour {
     //Animación de Muerte
     public void MuerteNoSuelo()
     {
-        x = transform.position.x;
-        z = transform.position.z;
-        fallTo = new Vector3(x, y, z);
-        terminoDeMorir = true;
+		if (lugarActual != 0) {
+			x = 0;
+			y = 0;
+			z = transform.position.z;
+			Quaternion rotacion = Quaternion.identity;
+			transform.rotation = rotacion;
+			transform.position = new Vector3 (x, y, z);
+			desiredPosition = y;
+
+			IniciarEfectoMuerte ();
+			terminoDeMorir = true;
+		}
     }
 
 
