@@ -21,7 +21,7 @@ public class MovimientoPersonaje : MonoBehaviour {
 
     //Movimiento
     public float velocity = 900;
-    private Vector3 movimiento;
+    public Vector3 movimiento;
     public int lugar;
     private int lugarActual;
 
@@ -48,7 +48,7 @@ public class MovimientoPersonaje : MonoBehaviour {
 
     //Checkpoint y Reinicio
     public GameObject gc;
-
+    public GameObject scriptFinalJuego;
 
 
     void Awake()
@@ -149,6 +149,7 @@ public class MovimientoPersonaje : MonoBehaviour {
                 {
                     lugar = 2;
                     Salto();
+                    gameObject.GetComponent<AudioSource>().Play();
 
                 }
 
@@ -301,6 +302,8 @@ public class MovimientoPersonaje : MonoBehaviour {
         animator.SetTrigger("Death");
         GetComponent<Animator>().Play("Golpe", -1, 0);
 		efecto.Stop (true);
+
+        gameObject.GetComponents<AudioSource>()[1].Play();
     }
 
     //Animación de Muerte
@@ -373,6 +376,8 @@ public class MovimientoPersonaje : MonoBehaviour {
         xAct = x;
         zAct = z;
         desiredPosition = y;
+
+        gameObject.GetComponent<AudioSource>().Play();
     }
 
     //Default
@@ -391,6 +396,7 @@ public class MovimientoPersonaje : MonoBehaviour {
         xAct = x;
         zAct = z;
         desiredPosition = y;
+        
     }
 
 }

@@ -29,6 +29,8 @@ public class ActivadorSpikes : MonoBehaviour {
         if (other.CompareTag("Player"))
         {
             animatorSpikes.SetInteger("Estado", 1);
+            spikes.GetComponent<AudioSource>().Play();
         }
     }
+    
 }

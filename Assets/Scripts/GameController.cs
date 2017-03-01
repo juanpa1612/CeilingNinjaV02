@@ -32,7 +32,7 @@ public class GameController : MonoBehaviour {
     //Checkpoint
     public int checkpoint;
     public GameObject parte1, parte2;
-    private Vector3 poscheckpoint1, poscheckpoint2,pos1,pos2;
+    private Vector3 pos1,pos2;
 
     //Bool que detecta si está jugando o no
     bool jugando;
@@ -78,8 +78,6 @@ public class GameController : MonoBehaviour {
 
         //Checkpoint
         checkpoint = 0;
-        poscheckpoint1 = parte1.transform.position;
-        poscheckpoint2 = parte2.transform.position;
         pos1 = new Vector3 (0,0,parte1.transform.position.z + 20f);
         pos2 = new Vector3(0, 0,parte2.transform.position.z + 20f);
 

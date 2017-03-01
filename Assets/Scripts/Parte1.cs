@@ -28,6 +28,7 @@ public class Parte1 : MonoBehaviour {
             checkpoint.text = (texto);
             checkpoint.GetComponent<Animator>().SetInteger("paso", 1);
             StartCoroutine("Animacion");
+            gameObject.GetComponent<AudioSource>().Play();
 
             if (subioCheck==false)
             {
