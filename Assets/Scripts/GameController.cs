@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour {
 
@@ -32,7 +33,14 @@ public class GameController : MonoBehaviour {
     //Checkpoint
     public int checkpoint;
     public GameObject parte1, parte2;
-    private Vector3 pos1,pos2;
+    private Vector3 pos1, pos2;
+
+    //Reinicio GameOVer
+    private GameObject btnReinicio, btnHome;
+    private bool hizoPlay;
+    private GameObject [] galletas;
+    
+    
 
     //Bool que detecta si está jugando o no
     bool jugando;
@@ -62,7 +70,7 @@ public class GameController : MonoBehaviour {
 
     void Start()
     {
-		jugando = true;
+        jugando = true;
         originalPosition = Vector3.zero;
         muerte = false;
         reinicio = false;
@@ -71,15 +79,23 @@ public class GameController : MonoBehaviour {
         vida = vidasMax;
         textoVida.text = "Vidas: " + vida.ToString();
         textoFinal.text = " ";
-       
+
 
         vidaPerder = false;
         timeText = 0;
 
         //Checkpoint
         checkpoint = 0;
-        pos1 = new Vector3 (0,0,parte1.transform.position.z + 20f);
-        pos2 = new Vector3(0, 0,parte2.transform.position.z + 20f);
+        pos1 = new Vector3(0, 0, parte1.transform.position.z + 20f);
+        pos2 = new Vector3(0, 0, parte2.transform.position.z + 20f);
+
+        //Botones GameOver
+        btnReinicio = GameObject.Find("btnReinicio");
+        btnHome = GameObject.Find("btnHome");
+        btnHome.SetActive(false);
+        btnReinicio.SetActive(false);
+
+        galletas = GameObject.FindGameObjectsWithTag("Galleta");
 
     }
 
@@ -117,6 +133,12 @@ public class GameController : MonoBehaviour {
             {
                 GameOver();
 				vida = 0;
+                //Botones GameOVer
+                btnReinicio.SetActive(true);
+                btnHome.SetActive(true);
+                btnReinicio.GetComponent<Animator>().SetInteger("Estado", 1);                
+                btnHome.GetComponent<Animator>().SetInteger("Estado", 1);
+
             }
         }
 
@@ -178,6 +200,7 @@ public class GameController : MonoBehaviour {
         vidaPerder = false;
         timeText = 0;
         ShowText();
+        checkpoint = 0;
     }
 
     void ShowText()
@@ -190,7 +213,7 @@ public class GameController : MonoBehaviour {
         }
     }
 
-    void TrueReset()
+    public void TrueReset()
     {
 		jugando = true;
 
@@ -214,7 +237,27 @@ public class GameController : MonoBehaviour {
         vidaPerder = false;
         timeText = 0;
         reinicio = true;
+
+        //Restaurar Galletas
+        for (int i = 0; i < galletas.Length; i++)
+        {
+            galletas[i].SetActive(true);
+        }
+        gameObject.GetComponent<UIManager>().points = 0;
+        //Desaparecer Botones
+        btnReinicio.GetComponent<Animator>().SetInteger("Estado",0);
+        btnHome.GetComponent<Animator>().SetInteger("Estado", 0);
+        textoFinal.GetComponent<Animator>().SetBool("Anim", false);
+
+        btnReinicio.SetActive(false);
+        btnHome.SetActive(false);
+
+
     }
 
+    public void CargarMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
 
 }
