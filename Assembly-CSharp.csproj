@@ -49,18 +49,22 @@
      <Compile Include="Assets\Obstaculos\Spikes\SpikesTeclas.cs" />
      <Compile Include="Assets\Scripts\ActivadorSpikes.cs" />
      <Compile Include="Assets\Scripts\AnimationHacha.cs" />
+     <Compile Include="Assets\Scripts\FinalJuego.cs" />
      <Compile Include="Assets\Scripts\Galletas.cs" />
      <Compile Include="Assets\Scripts\GameController.cs" />
      <Compile Include="Assets\Scripts\MovimientoCamara.cs" />
      <Compile Include="Assets\Scripts\MovimientoPersonaje.cs" />
      <Compile Include="Assets\Scripts\Obstaculos.cs" />
      <Compile Include="Assets\Scripts\Parte1.cs" />
+     <Compile Include="Assets\Scripts\Pausa.cs" />
      <Compile Include="Assets\Scripts\SwipeControl.cs" />
      <Compile Include="Assets\Scripts\TextureFix.cs" />
      <Compile Include="Assets\Scripts\TriggerHacha.cs" />
      <Compile Include="Assets\Scripts\UIManager.cs" />
-     <Compile Include="Assets\Scripts\btnplay.cs" />
      <Compile Include="Assets\UI Sources\btnPlay.cs" />
+ <Reference Include="UnityEngine.Advertisements">
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
@@ -75,6 +79,9 @@
  </Reference>
  <Reference Include="UnityEngine.HoloLens">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEngine.Purchasing">
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityPurchasing/UnityEngine.Purchasing.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.VR">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll</HintPath>
