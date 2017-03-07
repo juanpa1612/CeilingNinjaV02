@@ -6,8 +6,15 @@ public class SwipeControl : MonoBehaviour
 {
     MovimientoPersonaje personaje;
 
-    private float swipeTimer;
+	//Para pausar controles
+	Pausa pausa;
+
     private float timerMax = 1.6f;
+
+	//PAra evitar demasiados swipes
+	private float swipeTimer;
+	private float currentlyHere;
+	private float whereAmI;
 
     Vector2 firstPressPos;
     Vector2 secondPressPos;
@@ -16,12 +23,29 @@ public class SwipeControl : MonoBehaviour
     public void Awake()
     {
         personaje = GameObject.FindWithTag("Player").GetComponent<MovimientoPersonaje>();
-        swipeTimer = 0;
+		pausa = GameObject.FindWithTag ("GameController").GetComponent<Pausa> ();
+		swipeTimer = 0;
+
+		currentlyHere = 0;
+		whereAmI = currentlyHere;
     }
+
+	public void FixedUpdate()
+	{
+		if (swipeTimer >= 1) 
+		{
+			swipeTimer += Time.deltaTime;
+
+			if (swipeTimer >= 1.3f) 
+			{
+				swipeTimer = 0;
+			}
+		}
+	}
 
     public void Update()
     {
-        if (personaje.iniciando == false)
+		if (personaje.iniciando == false && personaje.murio == false && pausa.setPausa == 0)
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -36,24 +60,6 @@ public class SwipeControl : MonoBehaviour
             }
 
 
-			//Para mantener dedo cuando salta
-			/*
-            if (swipeTimer >= 1)
-            {
-                swipeTimer += Time.deltaTime;
-                if (Input.GetMouseButton(0))
-                {
-                    swipeTimer = 1.5f;
-                }
-            }
-
-            if (swipeTimer >= timerMax)
-            {
-                personaje.lugar = 0;
-                personaje.Salto();
-                swipeTimer = 0;
-            }
-            */
         }
     }
 
@@ -67,39 +73,66 @@ public class SwipeControl : MonoBehaviour
 
         //normalize the 2d vector
         currentSwipe.Normalize();
-        Debug.Log(currentSwipe);
 
         //swipe upwards
-        if (currentSwipe.y > 0 && currentSwipe.x > -0.5f && currentSwipe.x < 0.5f)
-        {
-            Debug.Log("up swipe");
-            personaje.lugar = 2;
-            personaje.Salto();
-            swipeTimer = 1;
-        }
-        //swipe down
-        if (currentSwipe.y < 0 && currentSwipe.x > -0.5f && currentSwipe.x < 0.5f)
-        {
-            Debug.Log("down swipe");
-            personaje.lugar = 0;
-            personaje.Salto();
-        }
-        //swipe left
-        if (currentSwipe.x < 0 && currentSwipe.y > -0.5f && currentSwipe.y < 0.5f)
-        {
-            Debug.Log("left swipe");
-            personaje.lugar = 1;
-            personaje.Salto();
-            swipeTimer = 1;
-        }
-        //swipe right
-        if (currentSwipe.x > 0 && currentSwipe.y > -0.5f && currentSwipe.y < 0.5f)
-        {
-            Debug.Log("right swipe");
-            personaje.lugar = 3;
-            personaje.Salto();
-            swipeTimer = 1;
-        }
+		if (swipeTimer == 0 && personaje.murio == false) //Para que funcione el swipe
+		{
+			if (currentSwipe.y > 0 && currentSwipe.x > -0.5f && currentSwipe.x < 0.5f) {
+				personaje.lugar = 2;
+
+				currentlyHere = 2;
+
+				personaje.Salto ();
+
+				if (whereAmI != currentlyHere) 
+				{
+					whereAmI = currentlyHere;
+					swipeTimer = 1;
+				}
+			}
+			//swipe down
+			if (currentSwipe.y < 0 && currentSwipe.x > -0.5f && currentSwipe.x < 0.5f) {
+				personaje.lugar = 0;
+
+				currentlyHere = 0;
+
+				personaje.Salto ();
+
+				if (whereAmI != currentlyHere) 
+				{
+					whereAmI = currentlyHere;
+					swipeTimer = 1;
+				}
+			}
+			//swipe left
+			if (currentSwipe.x < 0 && currentSwipe.y > -0.5f && currentSwipe.y < 0.5f) {
+				personaje.lugar = 1;
+
+				currentlyHere = 1;
+
+				personaje.Salto ();
+
+				if (whereAmI != currentlyHere) 
+				{
+					whereAmI = currentlyHere;
+					swipeTimer = 1;
+				}
+			}
+			//swipe right
+			if (currentSwipe.x > 0 && currentSwipe.y > -0.5f && currentSwipe.y < 0.5f) {
+				personaje.lugar = 3;
+
+				currentlyHere = 3;
+
+				personaje.Salto ();
+
+				if (whereAmI != currentlyHere) 
+				{
+					whereAmI = currentlyHere;
+					swipeTimer = 1;
+				}
+			}
+		}
     }
 
 }

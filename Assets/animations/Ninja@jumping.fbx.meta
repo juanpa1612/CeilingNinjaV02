@@ -204,14 +204,6 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.97835493
-        functionName: FinalSalto
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 1798eaf217d515842b00061e986b9ad9,
-          type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
       transformMask:
       - path: 
         weight: 1

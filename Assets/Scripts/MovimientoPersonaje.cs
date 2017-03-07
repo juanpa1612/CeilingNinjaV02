@@ -51,6 +51,9 @@ public class MovimientoPersonaje : MonoBehaviour {
     public GameObject scriptFinalJuego;
 
 
+	//Arreglo animación salto
+	float probablyFixTimer = -1f;
+
     void Awake()
     {
         //Anim
@@ -120,7 +123,7 @@ public class MovimientoPersonaje : MonoBehaviour {
 		}
 
 		//Animación muerte
-		if (terminoDeMorir == true)
+		if (terminoDeMorir == true && murio == false)
 		{
 			//transform.position = Vector3.SmoothDamp(transform.position, fallTo, ref falling, Time.deltaTime * demora);
 		}
@@ -130,6 +133,23 @@ public class MovimientoPersonaje : MonoBehaviour {
 		transform.position = new Vector3(transform.position.x, position, transform.position.z);
 
 		//transform.rotation = Quaternion.Lerp(transform.rotation, desiredRotation,  Time.deltaTime * damping);
+
+
+		//Arreglo salto
+		if (probablyFixTimer >= 0) 
+		{
+			probablyFixTimer += Time.deltaTime;
+
+			if (probablyFixTimer >= 0.30f && probablyFixTimer <= 0.35f) 
+			{
+				Cambio();
+			}
+
+			if (probablyFixTimer >= 0.40f) 
+			{
+				FinalSalto (lugarActual);
+			}
+		}
 	}
 
 
@@ -230,17 +250,27 @@ public class MovimientoPersonaje : MonoBehaviour {
         {
             if (lugarActual != lugar)
             {
+				probablyFixTimer = 0;
                 animator.SetInteger("Salto", 1);
             }
         }
     }
 
-    public void FinalSalto()
+	public void FinalSalto(int lugar)
     {
         if (iniciando == false)
         {
-            animator.SetInteger("Salto", 0);
-            efecto.Stop(true);
+			probablyFixTimer = -1f;
+			if (lugar == 2) //Cuando el salto termina arriba
+			{ 
+				animator.SetInteger ("Salto", 2);
+				efecto.Stop (true);
+			} 
+			else 
+			{
+				animator.SetInteger ("Salto", 0);
+				efecto.Stop (true);
+			}
         }
     }
 
@@ -248,7 +278,7 @@ public class MovimientoPersonaje : MonoBehaviour {
     //Efecto cuando cambia
     public void IniciarEfecto()
     {
-        efecto.transform.position = new Vector3(0, 1.5f, transform.position.z + 1);
+        efecto.transform.position = new Vector3(0, 1.8f, transform.position.z + 1);
         efecto.Play(true);
     }
 
@@ -263,7 +293,7 @@ public class MovimientoPersonaje : MonoBehaviour {
     //Cambio de lugar
     public void Cambio()
     {
-        if (iniciando == false)
+		if (iniciando == false && murio == false)
         {
             if (lugarActual != lugar)
             {
@@ -329,6 +359,7 @@ public class MovimientoPersonaje : MonoBehaviour {
     public void CorrerDerecha()
     {
         lugarActual = 3;
+		FinalSalto (lugarActual);
 
         float z = transform.position.z;
         float x = 1.3f;
@@ -347,6 +378,7 @@ public class MovimientoPersonaje : MonoBehaviour {
     public void CorrerIzquierda()
     {
         lugarActual = 1;
+		FinalSalto (lugarActual);
 
         float z = transform.position.z;
         float x = -1.3f;
@@ -364,6 +396,7 @@ public class MovimientoPersonaje : MonoBehaviour {
     public void CorrerTecho()
     {
         lugarActual = 2;
+		FinalSalto (lugarActual);
 
         float z = transform.position.z;
         float x = 0;
@@ -384,6 +417,7 @@ public class MovimientoPersonaje : MonoBehaviour {
     public void Correr()
     {
         lugarActual = 0;
+		FinalSalto (lugarActual);
 
         float z = transform.position.z;
         float x = 0;
