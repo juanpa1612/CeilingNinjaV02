@@ -7,7 +7,7 @@ public class btnPlay : MonoBehaviour
 
 	public void JugarNivel ()
     {
-        SceneManager.LoadScene("NowWithTextures",LoadSceneMode.Single);
+		SceneManager.LoadScene("EscenaExtraFinal",LoadSceneMode.Single);
     }
 
 }

@@ -20,8 +20,10 @@ public class Galletas : MonoBehaviour
     private void Start()
     {
         ninja = GameObject.FindGameObjectWithTag("Player");
-        gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<UIManager>();
-        GameController = GameObject.FindGameObjectWithTag("GameController");
+        gameController = GameObject.FindWithTag("GameController").GetComponent<UIManager>();
+        GameController = GameObject.FindWithTag("GameController");
+
+		particulaGalleta = GameObject.Find ("particulasGalletas").GetComponent<ParticleSystem>();
         fuenteAudio = GameController.GetComponents<AudioSource>();
     }
 
