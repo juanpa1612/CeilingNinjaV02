@@ -257,6 +257,8 @@ public class GameController : MonoBehaviour {
 
     public void CargarMenu()
     {
+		btnReinicio.GetComponent<Button> ().interactable = false;
+		btnHome.GetComponent<Button> ().interactable = false;
         SceneManager.LoadScene("MainMenu");
     }
 
